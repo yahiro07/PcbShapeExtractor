@@ -1,5 +1,5 @@
-import { css, domStyled, FC, jsx } from 'alumina';
-import { IGraphicsNode } from '~/base';
+import { AluminaNode, css, domStyled, FC, jsx } from 'alumina';
+import { IFootprintDisplayMode, IGraphicsNode } from '~/base';
 import { appStore } from '~/store';
 
 function getGraphicsNodePathSpec(node: IGraphicsNode): string {
@@ -54,25 +54,53 @@ function getGraphicsNodePathSpec(node: IGraphicsNode): string {
   throw new Error('invalid condition');
 }
 
+function renderCrosshair() {
+  const d = 2;
+  return [
+    <line class="key-marker" x1={-d} y1={0} x2={d} y2={0} />,
+    <line class="key-marker" x1={0} y1={-d} x2={0} y2={d} />,
+  ];
+}
+
+const footprintRendererMap: Record<IFootprintDisplayMode, () => AluminaNode[]> =
+  {
+    none() {
+      return [];
+    },
+    plus() {
+      return renderCrosshair();
+    },
+    rect14x14() {
+      return [<rect class="key-unit" x={-7} y={-7} width={14} height={14} />];
+    },
+    ['rect14x14+']() {
+      return [
+        <rect class="key-unit" x={-7} y={-7} width={14} height={14} />,
+        ...renderCrosshair(),
+      ];
+    },
+    rect18x18() {
+      return [<rect class="key-unit" x={-9} y={-9} width={18} height={18} />];
+    },
+  };
+
 export const PcbShapeView: FC = () => {
   const {
-    state: { pcbShapeData },
+    state: { pcbShapeData, footprintDisplayMode },
     readers: { filteredFootprints },
   } = appStore;
   const { boundingBox: bb, outlines } = pcbShapeData;
   const viewBoxSpec = `${bb.x} ${bb.y} ${bb.w} ${bb.h}`;
-  const d = 2;
   const outlinePathSpec = outlines
     .map((gr) => getGraphicsNodePathSpec(gr))
     .join(' ');
 
+  const footprintRenderer = footprintRendererMap[footprintDisplayMode];
+
   return domStyled(
     <div>
       <svg viewBox={viewBoxSpec}>
-        <g>
-          <path class="outline" d={outlinePathSpec} />
-        </g>
-
+        <path class="outline" d={outlinePathSpec} />
         <g>
           {filteredFootprints.map((fp, idx) => (
             <g
@@ -81,9 +109,7 @@ export const PcbShapeView: FC = () => {
                 fp.at.angle || 0
               )})`}
             >
-              <rect class="key-unit" x={-7} y={-7} width={14} height={14} />
-              <line class="key-marker" x1={-d} y1={0} x2={d} y2={0} />
-              <line class="key-marker" x1={0} y1={-d} x2={0} y2={d} />
+              {footprintRenderer()}
             </g>
           ))}
         </g>

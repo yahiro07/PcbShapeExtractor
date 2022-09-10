@@ -13,7 +13,7 @@ function createAppStore() {
   const state = {
     pcbShapeData: objects.deepCopy(fallbackPcbShapeData),
     footprintSearchWord: '',
-    footprintDisplayMode: 'plus' as IFootprintDisplayMode,
+    footprintDisplayMode: 'rect14x14+' as IFootprintDisplayMode,
   };
 
   const internalActions = {
