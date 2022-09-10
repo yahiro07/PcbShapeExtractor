@@ -1,4 +1,4 @@
-import { appUi, fallbackPcbShapeData } from '~/base';
+import { appUi, fallbackPcbShapeData, IFootprintDisplayMode } from '~/base';
 import {
   fileDialogHelpers_loadLocalTextFileWithDialog,
   objects,
@@ -13,6 +13,7 @@ function createAppStore() {
   const state = {
     pcbShapeData: objects.deepCopy(fallbackPcbShapeData),
     footprintSearchWord: '',
+    footprintDisplayMode: 'plus' as IFootprintDisplayMode,
   };
 
   const internalActions = {
@@ -23,6 +24,18 @@ function createAppStore() {
       state.footprintSearchWord =
         footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
       appUi.rerender();
+    },
+  };
+
+  const readers = {
+    get filteredFootprints() {
+      const { pcbShapeData, footprintSearchWord } = state;
+      return pcbShapeData.footprints.filter((it) =>
+        it.footprintName.toLowerCase().includes(footprintSearchWord)
+      );
+    },
+    get numFootprintsMatched() {
+      return readers.filteredFootprints.length;
     },
   };
 
@@ -38,9 +51,15 @@ function createAppStore() {
     loadTestData() {
       internalActions.loadPcbFileContent(kicadPcbTestData_sp2104);
     },
+    setFootprintSearchWord(word: string) {
+      state.footprintSearchWord = word;
+    },
+    setFootprintDisplayMode(mode: IFootprintDisplayMode) {
+      state.footprintDisplayMode = mode;
+    },
   };
 
-  return { state, actions };
+  return { state, readers, actions };
 }
 
 export const appStore = createAppStore();
