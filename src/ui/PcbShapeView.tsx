@@ -1,9 +1,6 @@
 import { css, domStyled, FC, jsx } from 'alumina';
-import { IGraphicsNode, IPcbShapeData } from '~/base';
-
-type Props = {
-  pcbShapeData: IPcbShapeData;
-};
+import { IGraphicsNode } from '~/base';
+import { appStore } from '~/store';
 
 function getGraphicsNodePathSpec(node: IGraphicsNode): string {
   if (node.type === 'grRect') {
@@ -57,7 +54,8 @@ function getGraphicsNodePathSpec(node: IGraphicsNode): string {
   throw new Error('invalid condition');
 }
 
-export const PcbShapeView: FC<Props> = ({ pcbShapeData }) => {
+export const PcbShapeView: FC = () => {
+  const { pcbShapeData, footprintSearchWord } = appStore.state;
   const { boundingBox: bb, footprints, outlines } = pcbShapeData;
   const viewBoxSpec = `${bb.x} ${bb.y} ${bb.w} ${bb.h}`;
   const d = 2;
@@ -65,9 +63,8 @@ export const PcbShapeView: FC<Props> = ({ pcbShapeData }) => {
     .map((gr) => getGraphicsNodePathSpec(gr))
     .join(' ');
 
-  const switchRegexp = /mx|cherry|choc/;
   const filteredFootprints = footprints.filter((it) =>
-    switchRegexp.test(it.footprintName.toLowerCase())
+    it.footprintName.toLowerCase().includes(footprintSearchWord)
   );
 
   return domStyled(

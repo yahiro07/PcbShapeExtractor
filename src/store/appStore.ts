@@ -3,12 +3,16 @@ import {
   fileDialogHelpers_loadLocalTextFileWithDialog,
   objects,
 } from '~/funcs';
-import { kicadFileContentLoader } from '~/loaders';
+import {
+  footprintSeeker_findDefaultFootprintSearchWord,
+  kicadFileContentLoader,
+} from '~/loaders';
 import { kicadPcbTestData_sp2104 } from './testData';
 
 function createAppStore() {
   const state = {
     pcbShapeData: objects.deepCopy(fallbackPcbShapeData),
+    footprintSearchWord: '',
   };
 
   const internalActions = {
@@ -16,6 +20,8 @@ function createAppStore() {
       const pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
       console.log({ pcbShapeData });
       state.pcbShapeData = pcbShapeData;
+      state.footprintSearchWord =
+        footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
       appUi.rerender();
     },
   };

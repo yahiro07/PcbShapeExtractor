@@ -15,4 +15,8 @@ export namespace arrays {
       i++;
     }
   }
+
+  export function count<T>(ar: T[], cond: (a: T) => boolean): number {
+    return ar.filter(cond).length;
+  }
 }
