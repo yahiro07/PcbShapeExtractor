@@ -119,8 +119,6 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
     throw new Error('invalid source content');
   }
 
-  const switchRegexp = /mx|cherry|choc/;
-
   const sFootprints = [
     ...pickEntities<{
       footprintName: string;
@@ -136,7 +134,7 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
       footprintName: 1,
       at: 'at',
     }),
-  ].filter((it) => switchRegexp.test(it.footprintName.toLowerCase()));
+  ];
 
   const sLines = pickEntities<{
     start: [number, number];

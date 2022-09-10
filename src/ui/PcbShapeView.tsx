@@ -65,6 +65,11 @@ export const PcbShapeView: FC<Props> = ({ pcbShapeData }) => {
     .map((gr) => getGraphicsNodePathSpec(gr))
     .join(' ');
 
+  const switchRegexp = /mx|cherry|choc/;
+  const filteredFootprints = footprints.filter((it) =>
+    switchRegexp.test(it.footprintName.toLowerCase())
+  );
+
   return domStyled(
     <svg viewBox={viewBoxSpec}>
       <g>
@@ -72,7 +77,7 @@ export const PcbShapeView: FC<Props> = ({ pcbShapeData }) => {
       </g>
 
       <g>
-        {footprints.map((fp, idx) => (
+        {filteredFootprints.map((fp, idx) => (
           <g
             key={idx}
             transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
