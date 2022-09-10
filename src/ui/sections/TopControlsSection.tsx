@@ -1,7 +1,6 @@
 import { css, domStyled, FC, jsx } from 'alumina';
 import { allFootprintDisplayModes } from '~/base';
 import { appStore } from '~/store';
-import { colors } from '../base';
 import { GeneralInput, GeneralSelector } from '../components';
 
 export const TopControlsSection: FC = () => {
@@ -40,10 +39,10 @@ export const TopControlsSection: FC = () => {
       </div>
     </div>,
     css`
-      border: solid 1px ${colors.panelEdge};
-      padding: 10px 15px;
-
       font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
       > .top-row {
         display: flex;
@@ -52,6 +51,7 @@ export const TopControlsSection: FC = () => {
         > div {
           display: flex;
           flex-direction: column;
+          gap: 2px;
         }
       }
     `

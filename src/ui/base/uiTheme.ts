@@ -1,5 +1,5 @@
 export const uiTheme = {
-  unitHeight: 26,
+  unitHeight: 30,
 };
 
 export const colors = {
