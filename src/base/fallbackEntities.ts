@@ -1,4 +1,4 @@
-import { IPcbShapeData } from './domainTypes';
+import { IPcbShapeData } from './pcbShapeDataTypes';
 
 export const fallbackPcbShapeData: IPcbShapeData = {
   footprints: [],
