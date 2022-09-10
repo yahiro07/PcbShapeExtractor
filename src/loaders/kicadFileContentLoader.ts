@@ -1,12 +1,11 @@
-import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
-import { pathComposer_composePath } from './pathComposer';
-
-import { vectorOp } from '~/funcs';
 import { IPcbShapeData, IPoint } from '~/base';
+import { vectorOp } from '~/funcs';
+import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
 import {
-  degToRad,
   calculateCircleRadiusFrom3PointArc,
+  degToRad,
 } from './geometryHelpers';
+import { pathComposer_composePath } from './pathComposer';
 
 interface IKicadFileContentLoader {
   loadKicadPcbFileContent(source: string): IPcbShapeData;
@@ -227,7 +226,7 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
   const arcs = sArcs.map((it) => {
     if (it.angle !== undefined) {
       const ep = tupleToPointXY(it.end);
-      const cp = tupleToPointXY(it.start); //center point of arc circle
+      const cp = tupleToPointXY(it.start); // center point of arc circle
       const vce = vectorOp.subtract(ep, cp);
       const sp = vectorOp.add(cp, vectorOp.rotate(vce, degToRad(it.angle)));
       const mp = vectorOp.add(cp, vectorOp.rotate(vce, degToRad(it.angle / 2)));
