@@ -55,61 +55,62 @@ function getGraphicsNodePathSpec(node: IGraphicsNode): string {
 }
 
 export const PcbShapeView: FC = () => {
-  const { pcbShapeData, footprintSearchWord } = appStore.state;
-  const { boundingBox: bb, footprints, outlines } = pcbShapeData;
+  const {
+    state: { pcbShapeData },
+    readers: { filteredFootprints },
+  } = appStore;
+  const { boundingBox: bb, outlines } = pcbShapeData;
   const viewBoxSpec = `${bb.x} ${bb.y} ${bb.w} ${bb.h}`;
   const d = 2;
   const outlinePathSpec = outlines
     .map((gr) => getGraphicsNodePathSpec(gr))
     .join(' ');
 
-  const filteredFootprints = footprints.filter((it) =>
-    it.footprintName.toLowerCase().includes(footprintSearchWord)
-  );
-
   return domStyled(
-    <svg viewBox={viewBoxSpec}>
-      <g>
-        <path class="outline" d={outlinePathSpec} />
-      </g>
+    <div>
+      <svg viewBox={viewBoxSpec}>
+        <g>
+          <path class="outline" d={outlinePathSpec} />
+        </g>
 
-      <g>
-        {filteredFootprints.map((fp, idx) => (
-          <g
-            key={idx}
-            transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
-              fp.at.angle || 0
-            )})`}
-          >
-            <rect class="key-unit" x={-7} y={-7} width={14} height={14} />
-            <line class="key-marker" x1={-d} y1={0} x2={d} y2={0} />
-            <line class="key-marker" x1={0} y1={-d} x2={0} y2={d} />
-          </g>
-        ))}
-      </g>
-    </svg>,
+        <g>
+          {filteredFootprints.map((fp, idx) => (
+            <g
+              key={idx}
+              transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
+                fp.at.angle || 0
+              )})`}
+            >
+              <rect class="key-unit" x={-7} y={-7} width={14} height={14} />
+              <line class="key-marker" x1={-d} y1={0} x2={d} y2={0} />
+              <line class="key-marker" x1={0} y1={-d} x2={0} y2={d} />
+            </g>
+          ))}
+        </g>
+      </svg>
+    </div>,
     css`
-      border: solid 1px #888;
-      width: 800px;
-      height: 400px;
-      padding: 20px;
+      > svg {
+        width: 800px;
+        height: 400px;
 
-      .key-unit {
-        fill: transparent;
-        stroke: #f08;
-        stroke-width: 0.3px;
-      }
+        .key-unit {
+          fill: transparent;
+          stroke: #f08;
+          stroke-width: 0.3px;
+        }
 
-      .key-marker {
-        stroke: #f08;
-        stroke-width: 0.3px;
-      }
+        .key-marker {
+          stroke: #f08;
+          stroke-width: 0.3px;
+        }
 
-      .outline {
-        fill: #08f4;
-        stroke: #08f;
-        stroke-width: 0.3px;
-        fill-rule: evenodd;
+        .outline {
+          fill: #08f4;
+          stroke: #08f;
+          stroke-width: 0.3px;
+          fill-rule: evenodd;
+        }
       }
     `
   );
