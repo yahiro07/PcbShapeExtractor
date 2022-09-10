@@ -1,31 +1,8 @@
-import { css, domStyled, FC, jsx, render } from 'alumina';
-import { kicadFileContentLoader } from './loaders';
-import { PcbShapeView } from './ui';
-
-async function fetchAssetTextFile(filePath: string) {
-  const res = await fetch(filePath);
-  const text = await res.text();
-  return text;
-}
+import { jsx, render } from 'alumina';
+import { PageRoot } from './ui';
 
 async function start() {
-  const targetFilePath = './keydrip7_2208d.kicad_pcb';
-  console.log('----------');
-
-  const kicadFileContent = await fetchAssetTextFile(targetFilePath);
-  const pcbShapeData =
-    kicadFileContentLoader.loadKicadPcbFileContent(kicadFileContent);
-  console.log({ pcbShapeData });
-
-  const PageRoot: FC = () => {
-    return domStyled(
-      <div>
-        <PcbShapeView pcbShapeData={pcbShapeData} />
-      </div>,
-      css``
-    );
-  };
-
+  console.log('kicad pcb shape extractor v220910');
   render(() => <PageRoot />, document.getElementById('app'));
 }
 
