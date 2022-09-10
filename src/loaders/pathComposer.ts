@@ -1,6 +1,5 @@
-import { IGrPathNode, IGrPathSegmentNode, IPoint } from './types';
-import { arrays, objects } from './utils';
-import { vectorOp } from './vectorOp';
+import { IGrPathNode, IGrPathSegmentNode, IPoint } from '~/base';
+import { vectorOp, objects, arrays } from '~/funcs';
 
 type IPathComposer_composePath = (nodes: IGrPathSegmentNode[]) => IGrPathNode[];
 

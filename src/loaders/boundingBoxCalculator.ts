@@ -1,4 +1,4 @@
-import { IFootprintNode, IGraphicsNode, IPoint, IRect } from './types';
+import { IFootprintNode, IGraphicsNode, IPoint, IRect } from '~/base';
 
 export function calculatePcbShapeBoundingBox(
   footprints: IFootprintNode[],

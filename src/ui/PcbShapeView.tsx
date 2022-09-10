@@ -1,5 +1,5 @@
 import { css, domStyled, FC, jsx } from 'alumina';
-import { IGraphicsNode, IPcbShapeData } from './types';
+import { IGraphicsNode, IPcbShapeData } from '~/base';
 
 type Props = {
   pcbShapeData: IPcbShapeData;

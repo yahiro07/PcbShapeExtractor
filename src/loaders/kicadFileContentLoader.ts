@@ -1,8 +1,12 @@
 import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
 import { pathComposer_composePath } from './pathComposer';
-import { calculateCircleRadiusFrom3PointArc, degToRad } from './pathHelpers';
-import { IPcbShapeData, IPoint } from './types';
-import { vectorOp } from './vectorOp';
+
+import { vectorOp } from '~/funcs';
+import { IPcbShapeData, IPoint } from '~/base';
+import {
+  degToRad,
+  calculateCircleRadiusFrom3PointArc,
+} from './geometryHelpers';
 
 interface IKicadFileContentLoader {
   loadKicadPcbFileContent(source: string): IPcbShapeData;

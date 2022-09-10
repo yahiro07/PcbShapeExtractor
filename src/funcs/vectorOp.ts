@@ -1,4 +1,4 @@
-import { IPoint, IVector } from './types';
+import { IPoint, IVector } from '~/base';
 
 export const vectorOp = {
   getDist(p0: IPoint, p1: IPoint): number {

@@ -1,6 +1,6 @@
 import { css, domStyled, FC, jsx, render } from 'alumina';
-import { kicadFileContentLoader } from './kicadFileContentLoader';
-import { PcbShapeView } from './PcbShapeView';
+import { kicadFileContentLoader } from './loaders';
+import { PcbShapeView } from './ui';
 
 async function fetchAssetTextFile(filePath: string) {
   const res = await fetch(filePath);

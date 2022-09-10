@@ -1,5 +1,5 @@
-import { IPoint } from './types';
-import { vectorOp } from './vectorOp';
+import { IPoint } from '~/base';
+import { vectorOp } from '~/funcs';
 
 export function degToRad(r: number) {
   return (r * Math.PI) / 180;
