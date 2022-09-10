@@ -4,10 +4,20 @@ import {
   objects,
 } from '~/funcs';
 import { kicadFileContentLoader } from '~/loaders';
+import { kicadPcbTestData_sp2104 } from './testData';
 
 function createAppStore() {
   const state = {
     pcbShapeData: objects.deepCopy(fallbackPcbShapeData),
+  };
+
+  const internalActions = {
+    loadPcbFileContent(text: string) {
+      const pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+      console.log({ pcbShapeData });
+      state.pcbShapeData = pcbShapeData;
+      appUi.rerender();
+    },
   };
 
   const actions = {
@@ -16,13 +26,11 @@ function createAppStore() {
         '.kicad_pcb'
       );
       if (res) {
-        const pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(
-          res.contentText
-        );
-        console.log({ pcbShapeData });
-        state.pcbShapeData = pcbShapeData;
-        appUi.rerender();
+        internalActions.loadPcbFileContent(res.contentText);
       }
+    },
+    loadTestData() {
+      internalActions.loadPcbFileContent(kicadPcbTestData_sp2104);
     },
   };
 
