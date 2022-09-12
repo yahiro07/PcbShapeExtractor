@@ -7,6 +7,7 @@ import {
   footprintSeeker_findDefaultFootprintSearchWord,
   kicadFileContentLoader,
 } from '~/loaders';
+import { svgExporter_openDomSvgImageInNewTab } from './svgExporter';
 import { kicadPcbTestData_sp2104 } from './testData';
 
 function createAppStore() {
@@ -57,6 +58,12 @@ function createAppStore() {
     setFootprintDisplayMode(mode: IFootprintDisplayMode) {
       state.footprintDisplayMode = mode;
     },
+    exportSvg() {
+      const domSvgOuter = document.getElementById('domSvgPcbShapeViewOuter')!;
+      const svgElement = domSvgOuter.firstChild! as SVGSVGElement;
+      svgExporter_openDomSvgImageInNewTab(svgElement);
+    },
+    exportJson() {},
   };
 
   return { state, readers, actions };

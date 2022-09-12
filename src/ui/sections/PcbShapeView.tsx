@@ -57,8 +57,8 @@ function getGraphicsNodePathSpec(node: IGraphicsNode): string {
 function renderCrosshair() {
   const d = 2;
   return [
-    <line class="key-marker" x1={-d} y1={0} x2={d} y2={0} />,
-    <line class="key-marker" x1={0} y1={-d} x2={0} y2={d} />,
+    <line x1={-d} y1={0} x2={d} y2={0} />,
+    <line x1={0} y1={-d} x2={0} y2={d} />,
   ];
 }
 
@@ -71,16 +71,16 @@ const footprintRendererMap: Record<IFootprintDisplayMode, () => AluminaNode[]> =
       return renderCrosshair();
     },
     rect14x14() {
-      return [<rect class="key-unit" x={-7} y={-7} width={14} height={14} />];
+      return [<rect x={-7} y={-7} width={14} height={14} />];
     },
     ['rect14x14+']() {
       return [
-        <rect class="key-unit" x={-7} y={-7} width={14} height={14} />,
+        <rect x={-7} y={-7} width={14} height={14} />,
         ...renderCrosshair(),
       ];
     },
     rect18x18() {
-      return [<rect class="key-unit" x={-9} y={-9} width={18} height={18} />];
+      return [<rect x={-9} y={-9} width={18} height={18} />];
     },
   };
 
@@ -98,19 +98,27 @@ export const PcbShapeView: FC = () => {
   const footprintRenderer = footprintRendererMap[footprintDisplayMode];
 
   return domStyled(
-    <div>
-      <svg viewBox={viewBoxSpec}>
-        <path class="outline" d={outlinePathSpec} />
-        <g>
+    <div id="domSvgPcbShapeViewOuter">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBoxSpec}>
+        <defs>
+          <g id="footprint">{footprintRenderer()}</g>
+        </defs>
+        <path
+          d={outlinePathSpec}
+          fill="#def"
+          stroke="#08f"
+          stroke-width="0.3px"
+          fill-rule="evenodd"
+        />
+        <g fill="transparent" stroke="#f08" stroke-width="0.3px">
           {filteredFootprints.map((fp, idx) => (
-            <g
+            <use
+              href="#footprint"
               key={idx}
               transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
                 fp.at.angle || 0
               )})`}
-            >
-              {footprintRenderer()}
-            </g>
+            />
           ))}
         </g>
       </svg>
@@ -119,24 +127,6 @@ export const PcbShapeView: FC = () => {
       > svg {
         width: 800px;
         height: 400px;
-
-        .key-unit {
-          fill: transparent;
-          stroke: #f08;
-          stroke-width: 0.3px;
-        }
-
-        .key-marker {
-          stroke: #f08;
-          stroke-width: 0.3px;
-        }
-
-        .outline {
-          fill: #08f4;
-          stroke: #08f;
-          stroke-width: 0.3px;
-          fill-rule: evenodd;
-        }
       }
     `
   );
