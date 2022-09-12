@@ -55,7 +55,7 @@ function getGraphicsNodePathSpec(node: IGraphicsNode): string {
 }
 
 function renderCrosshair() {
-  const d = 2;
+  const d = 1.8;
   return [
     <line x1={-d} y1={0} x2={d} y2={0} />,
     <line x1={0} y1={-d} x2={0} y2={d} />,
@@ -84,6 +84,14 @@ const footprintRendererMap: Record<IFootprintDisplayMode, () => AluminaNode[]> =
     },
   };
 
+const footprintRefTextYMap: Record<IFootprintDisplayMode, number> = {
+  none: 0,
+  plus: 4.5,
+  rect14x14: 0,
+  'rect14x14+': 4.5,
+  rect18x18: 0,
+};
+
 export const PcbShapeView: FC = () => {
   const {
     state: { pcbShapeData, footprintDisplayMode },
@@ -96,7 +104,7 @@ export const PcbShapeView: FC = () => {
     .join(' ');
 
   const footprintRenderer = footprintRendererMap[footprintDisplayMode];
-
+  const footprintRefTextY = footprintRefTextYMap[footprintDisplayMode];
   return domStyled(
     <div id="domSvgPcbShapeViewOuter">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBoxSpec}>
@@ -107,10 +115,10 @@ export const PcbShapeView: FC = () => {
           d={outlinePathSpec}
           fill="#def"
           stroke="#08f"
-          stroke-width="0.3px"
+          stroke-width="0.25"
           fill-rule="evenodd"
         />
-        <g fill="transparent" stroke="#f08" stroke-width="0.3px">
+        <g fill="transparent" stroke="#f08" stroke-width="0.25">
           {filteredFootprints.map((fp, idx) => (
             <use
               href="#footprint"
@@ -122,11 +130,44 @@ export const PcbShapeView: FC = () => {
           ))}
         </g>
       </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={viewBoxSpec}
+        class="overlay"
+      >
+        <g
+          fill="#248"
+          font-size="2.6"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          if={footprintDisplayMode !== 'none'}
+        >
+          {filteredFootprints.map((fp, idx) => (
+            <g
+              key={idx}
+              transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
+                fp.at.angle || 0
+              )})`}
+            >
+              <text x={0} y={footprintRefTextY}>
+                {fp.referenceName}
+              </text>
+            </g>
+          ))}
+        </g>
+      </svg>
     </div>,
     css`
+      position: relative;
       > svg {
         width: 800px;
         height: 400px;
+      }
+
+      > svg.overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
       }
     `
   );
