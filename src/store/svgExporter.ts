@@ -46,8 +46,17 @@ const XML = {
   },
 };
 
-export function svgExporter_openDomSvgImageInNewTab(svgElement: SVGSVGElement) {
+export function svgExporter_openDomSvgImageInNewTab(
+  _svgElement: SVGSVGElement
+) {
+  const svgElement = _svgElement.cloneNode(true) as SVGSVGElement;
+  svgElement.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+  svgElement.setAttribute('version', '1.1');
+  svgElement.setAttribute('width', '100%');
+  svgElement.setAttribute('height', '100%');
+
   const svgTextRaw = new XMLSerializer().serializeToString(svgElement);
+
   const svgText = XML.prettify(svgTextRaw);
   const dataUrl = `data:image/svg+xml;base64,${btoa(
     unescape(encodeURIComponent(svgText))

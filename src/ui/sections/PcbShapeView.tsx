@@ -107,7 +107,7 @@ export const PcbShapeView: FC = () => {
   const footprintRefTextY = footprintRefTextYMap[footprintDisplayMode];
   return domStyled(
     <div id="domSvgPcbShapeViewOuter">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBoxSpec}>
+      <svg viewBox={viewBoxSpec}>
         <defs>
           <g id="footprint">{footprintRenderer()}</g>
         </defs>
@@ -130,11 +130,7 @@ export const PcbShapeView: FC = () => {
           ))}
         </g>
       </svg>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={viewBoxSpec}
-        class="overlay"
-      >
+      <svg viewBox={viewBoxSpec} class="overlay">
         <g
           fill="#248"
           font-size="2.6"
