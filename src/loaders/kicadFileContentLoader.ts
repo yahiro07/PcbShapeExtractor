@@ -1,4 +1,4 @@
-import { IPcbShapeData, IPoint } from '~/base';
+import { appConfig, IPcbShapeData, IPoint } from '~/base';
 import { vectorOp } from '~/funcs';
 import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
 import {
@@ -263,7 +263,11 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
 
   const paths = pathComposer_composePath([...lines, ...arcs, ...curves]);
   const outlines = [...rects, ...circles, ...polygons, ...paths];
-  const boundingBox = calculatePcbShapeBoundingBox(footprints, outlines, 1);
+  const boundingBox = calculatePcbShapeBoundingBox(
+    footprints,
+    outlines,
+    appConfig.shapeBoundingBoxOuterMargin
+  );
   return { footprints, outlines, boundingBox };
 }
 

@@ -1,3 +1,4 @@
+export * from './appConfig';
 export * from './appUi';
 export * from './domainTypes';
 export * from './fallbackEntities';

@@ -7,6 +7,7 @@ import {
   footprintSeeker_findDefaultFootprintSearchWord,
   kicadFileContentLoader,
 } from '~/loaders';
+import { jsonExporter_openPcbShapeDataJsonInNewTab } from './jsonExporter';
 import { svgExporter_openDomSvgImageInNewTab } from './svgExporter';
 import { kicadPcbTestData_sp2104 } from './testData';
 
@@ -63,7 +64,18 @@ function createAppStore() {
       const svgElement = domSvgOuter.firstChild! as SVGSVGElement;
       svgExporter_openDomSvgImageInNewTab(svgElement);
     },
-    exportJson() {},
+    exportJson() {
+      const {
+        pcbShapeData: { boundingBox, outlines },
+      } = state;
+      const { filteredFootprints: footprints } = readers;
+      const documentObject = {
+        outlines,
+        boundingBox,
+        footprints,
+      };
+      jsonExporter_openPcbShapeDataJsonInNewTab(documentObject);
+    },
   };
 
   return { state, readers, actions };
