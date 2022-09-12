@@ -1,5 +1,5 @@
 import { appConfig, IPcbShapeData, IPoint } from '~/base';
-import { vectorOp } from '~/funcs';
+import { sortOrderBy, vectorOp } from '~/funcs';
 import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
 import {
   calculateCircleRadiusFrom3PointArc,
@@ -85,18 +85,26 @@ function convertElementTypes(src: ISExpressionRawString): ISExpression {
 }
 
 function pickEntities<T>(
-  root: ISExpressionRoot,
-  type: string,
-  attrsMap: Record<keyof T, string | number>
+  sExpressionRoot: ISExpressionRoot,
+  types: string | string[],
+  attrsMap: Record<keyof T, string | number | [string, string]>
 ) {
-  return root
-    .filter((se) => se[0] === type)
+  return sExpressionRoot
+    .filter(
+      (se) => se[0] === types || (Array.isArray(types) && types.includes(se[0]))
+    )
     .map((se) => {
       return Object.fromEntries(
         Object.keys(attrsMap).map((key) => {
           const propName = attrsMap[key as keyof T];
           if (typeof propName === 'number') {
             const value = se[propName];
+            return [key, value];
+          } else if (Array.isArray(propName)) {
+            const arr = (se as string[])
+              ?.find((it) => it[0] === propName[0] && it[1] === propName[1])
+              ?.slice(2);
+            const value = arr?.length === 1 ? arr[0] : arr;
             return [key, value];
           } else {
             const arr = (se as string[])
@@ -114,27 +122,28 @@ function tupleToPointXY(xy: [number, number]): IPoint {
   return { x: xy[0], y: xy[1] };
 }
 
+function getFootprintReferenceOrder(ref: string): number {
+  const m = ref.match(/([0-9]+)$/);
+  if (m) {
+    return parseInt(m[1]);
+  }
+  return 0;
+}
+
 function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
   if (!Array.isArray(source)) {
     throw new Error('invalid source content');
   }
 
-  const sFootprints = [
-    ...pickEntities<{
-      footprintName: string;
-      at: [number, number, number];
-    }>(source, 'footprint', {
-      footprintName: 1,
-      at: 'at',
-    }),
-    ...pickEntities<{
-      footprintName: string;
-      at: [number, number, number];
-    }>(source, 'module', {
-      footprintName: 1,
-      at: 'at',
-    }),
-  ];
+  const sFootprints = pickEntities<{
+    footprintName: string;
+    fpTextReference: [string, any, any, any];
+    at: [number, number, number];
+  }>(source, ['footprint', 'module'], {
+    footprintName: 1,
+    fpTextReference: ['fp_text', 'reference'],
+    at: 'at',
+  });
 
   const sLines = pickEntities<{
     start: [number, number];
@@ -196,14 +205,17 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
     layer: 'layer',
   }).filter((it) => it.layer === 'Edge.Cuts');
 
-  const footprints = sFootprints.map((it) => ({
-    footprintName: it.footprintName,
-    at: {
-      x: it.at[0],
-      y: it.at[1],
-      angle: it.at[2],
-    },
-  }));
+  const footprints = sFootprints
+    .map((it) => ({
+      footprintName: it.footprintName,
+      referenceName: it.fpTextReference[0],
+      at: {
+        x: it.at[0],
+        y: it.at[1],
+        angle: it.at[2],
+      },
+    }))
+    .sort(sortOrderBy((it) => getFootprintReferenceOrder(it.referenceName)));
 
   const lines = sLines.map((it) => ({
     type: 'grLine' as const,

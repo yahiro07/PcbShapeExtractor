@@ -50,6 +50,7 @@ function formatPcbDataForExport(pcbShapeData: IPcbShapeData): any {
       }
     }),
     footprints: pcbShapeData.footprints.map((it) => ({
+      ref: it.referenceName,
       x: roundCoord(it.at.x),
       y: roundCoord(it.at.y),
       angle: roundCoord(it.at.angle ?? 0),

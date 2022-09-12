@@ -2,6 +2,7 @@ import { IPoint, IRect } from './geometryTypes';
 
 export type IFootprintNode = {
   footprintName: string;
+  referenceName: string;
   at: {
     x: number;
     y: number;

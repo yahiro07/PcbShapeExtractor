@@ -20,3 +20,24 @@ export namespace arrays {
     return ar.filter(cond).length;
   }
 }
+
+export function compareStringOrNumber(a: string | number, b: string | number) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+export function sortOrderBy<T>(
+  proc: (arg: T) => string | number,
+  method: 'asc' | 'dsc' = 'asc'
+): (a: T, b: T) => number {
+  if (method === 'asc') {
+    return (a, b) => compareStringOrNumber(proc(a), proc(b));
+  } else {
+    return (a, b) => compareStringOrNumber(proc(b), proc(a));
+  }
+}

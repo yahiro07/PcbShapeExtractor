@@ -29,6 +29,7 @@ export const PageRoot: FC = () => {
       > .inner {
         display: flex;
         flex-direction: column;
+        overflow-x: hidden;
 
         > h1 {
           font-size: 40px;
