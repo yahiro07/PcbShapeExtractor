@@ -4,7 +4,7 @@ import { PageRoot } from './ui';
 import { cssGlobalStyle } from './ui/globalStyle';
 
 async function start() {
-  console.log('kicad pcb shape extractor v220912');
+  console.log('PCB Shape Extractor v220912');
   appStore.actions.loadTestData();
   applyGlobalStyle(cssGlobalStyle);
   render(() => <PageRoot />, document.getElementById('app'));

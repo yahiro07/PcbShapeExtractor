@@ -4,7 +4,7 @@ import path from 'path';
 export default defineConfig({
   base: './',
   build: {
-    outDir: './dist',
+    outDir: './dist/pcb-shape-extractor',
     emptyOutDir: true,
   },
   server: {
