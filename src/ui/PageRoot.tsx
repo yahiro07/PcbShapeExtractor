@@ -10,7 +10,10 @@ export const PageRoot: FC = () => {
   return domStyled(
     <div>
       <div class="inner">
-        <h1>PCB Shape Extractor</h1>
+        <h1>
+          <i class="ph-cube-fill" />
+          PCB Shape Extractor
+        </h1>
         <div class="row">
           <TopControlsSection />
         </div>
@@ -36,6 +39,12 @@ export const PageRoot: FC = () => {
           background: #6c8;
           color: #fff;
           padding-left: 10px;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          > i {
+            margin-top: 3px;
+          }
         }
 
         > .row {
