@@ -2,6 +2,7 @@ import { css, domStyled, FC, jsx } from 'alumina';
 import { colors } from './base';
 import {
   BottomControlsSection,
+  HeaderBar,
   PcbShapeView,
   TopControlsSection,
 } from './sections';
@@ -9,11 +10,8 @@ import {
 export const PageRoot: FC = () => {
   return domStyled(
     <div>
+      <HeaderBar />
       <div class="inner">
-        <h1>
-          <i class="ph-cube-fill" />
-          PCB Shape Extractor
-        </h1>
         <div class="row">
           <TopControlsSection />
         </div>
@@ -36,19 +34,6 @@ export const PageRoot: FC = () => {
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
-
-        > h1 {
-          font-size: 40px;
-          background: #6c8;
-          color: #fff;
-          padding-left: 10px;
-          display: flex;
-          align-items: center;
-          gap: 3px;
-          > i {
-            margin-top: 3px;
-          }
-        }
 
         > .row {
           border: solid 1px ${colors.panelEdge};
