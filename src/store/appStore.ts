@@ -16,6 +16,7 @@ function createAppStore() {
     pcbShapeData: objects.deepCopy(fallbackPcbShapeData),
     footprintSearchWord: '',
     footprintDisplayMode: 'rect14x14' as IFootprintDisplayMode,
+    infoPanelVisible: false,
   };
 
   const internalActions = {
@@ -75,6 +76,12 @@ function createAppStore() {
         footprints,
       };
       jsonExporter_openPcbShapeDataJsonInNewTab(documentObject);
+    },
+    showInfoPanel() {
+      state.infoPanelVisible = true;
+    },
+    hideInfoPanel() {
+      state.infoPanelVisible = false;
     },
   };
 

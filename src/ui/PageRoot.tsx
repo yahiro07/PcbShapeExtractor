@@ -1,4 +1,5 @@
 import { css, domStyled, FC, jsx } from 'alumina';
+import { appStore } from '~/store';
 import { colors } from './base';
 import {
   BottomControlsSection,
@@ -6,8 +7,10 @@ import {
   PcbShapeView,
   TopControlsSection,
 } from './sections';
+import { UsagePanel } from './sections/UsagePanel';
 
 export const PageRoot: FC = () => {
+  const { infoPanelVisible } = appStore.state;
   return domStyled(
     <div>
       <HeaderBar />
@@ -23,8 +26,10 @@ export const PageRoot: FC = () => {
           <BottomControlsSection />
         </div>
       </div>
+      <UsagePanel if={infoPanelVisible} />
     </div>,
     css`
+      position: relative;
       height: 100%;
       padding: 10px;
       font-size: 15px;
