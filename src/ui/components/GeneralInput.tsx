@@ -8,6 +8,7 @@ type Props = {
   onChangeComplete?: (value: string) => void;
   placeholder?: string;
   width?: number;
+  disabled?: boolean;
 };
 
 export const GeneralInput: FC<Props> = ({
@@ -16,6 +17,7 @@ export const GeneralInput: FC<Props> = ({
   placeholder,
   onChangeComplete,
   width,
+  disabled,
 }) => {
   return domStyled(
     <input
@@ -25,6 +27,7 @@ export const GeneralInput: FC<Props> = ({
       onChange={onChangeComplete && reflectValue(onChangeComplete)}
       placeholder={placeholder}
       style={(width && { width: `${width}px` }) || undefined}
+      disabled={disabled}
     />,
     css`
       height: ${uiTheme.unitHeight}px;

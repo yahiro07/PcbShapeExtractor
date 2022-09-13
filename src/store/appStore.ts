@@ -17,6 +17,7 @@ function createAppStore() {
     footprintSearchWord: '',
     footprintDisplayMode: 'rect14x14' as IFootprintDisplayMode,
     infoPanelVisible: false,
+    dataLoaded: false,
   };
 
   const internalActions = {
@@ -26,6 +27,8 @@ function createAppStore() {
       state.pcbShapeData = pcbShapeData;
       state.footprintSearchWord =
         footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
+      state.dataLoaded =
+        pcbShapeData.outlines.length > 0 || pcbShapeData.footprints.length > 0;
       appUi.rerender();
     },
   };

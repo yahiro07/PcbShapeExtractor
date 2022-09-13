@@ -5,7 +5,7 @@ import { GeneralInput, GeneralSelector } from '../components';
 
 export const TopControlsSection: FC = () => {
   const {
-    state: { footprintSearchWord, footprintDisplayMode },
+    state: { footprintSearchWord, footprintDisplayMode, dataLoaded },
     readers: { numFootprintsMatched },
     actions: { setFootprintSearchWord, setFootprintDisplayMode },
   } = appStore;
@@ -21,6 +21,7 @@ export const TopControlsSection: FC = () => {
             value={footprintSearchWord}
             onChange={setFootprintSearchWord}
             width={inputWidth}
+            disabled={!dataLoaded}
           />
         </div>
         <div>
@@ -30,12 +31,15 @@ export const TopControlsSection: FC = () => {
             onChange={setFootprintDisplayMode}
             options={allFootprintDisplayModes}
             width={inputWidth}
+            disabled={!dataLoaded}
           />
         </div>
       </div>
 
-      <div>
-        <p>{numFootprintsMatched}個のフットプリントを表示しています。</p>
+      <div class="second-row">
+        <p class={['count-text', dataLoaded && 'active']}>
+          {numFootprintsMatched}個のフットプリントを表示しています。
+        </p>
       </div>
     </div>,
     css`
@@ -51,6 +55,13 @@ export const TopControlsSection: FC = () => {
           display: flex;
           flex-direction: column;
           gap: 2px;
+        }
+      }
+
+      > .second-row {
+        visibility: hidden;
+        > .count-text.active {
+          visibility: visible;
         }
       }
     `
