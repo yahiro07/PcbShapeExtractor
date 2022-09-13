@@ -26,6 +26,7 @@ export const GeneralButton: FC<Props> = ({
     css`
       padding: 7px 10px;
       cursor: pointer;
+      font-size: 15px;
     `
   );
 };

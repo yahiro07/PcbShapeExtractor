@@ -29,6 +29,9 @@ export const PageRoot: FC = () => {
     css`
       height: 100%;
       padding: 10px;
+      font-size: 15px;
+      color: #333;
+
       > .inner {
         display: flex;
         flex-direction: column;

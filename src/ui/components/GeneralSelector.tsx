@@ -35,8 +35,6 @@ export const GeneralSelector = <T extends string>({
       })}
     </select>,
     css`
-      /* -webkit-appearance: none; */
-
       height: ${uiTheme.unitHeight}px;
       cursor: pointer;
     `
