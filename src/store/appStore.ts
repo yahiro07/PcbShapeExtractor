@@ -1,4 +1,9 @@
-import { appUi, fallbackPcbShapeData, IFootprintDisplayMode } from '~/base';
+import {
+  appUi,
+  fallbackPcbShapeData,
+  IFootprintDisplayMode,
+  IPcbShapeData,
+} from '~/base';
 import {
   fileDialogHelpers_loadLocalTextFileWithDialog,
   objects,
@@ -22,7 +27,14 @@ function createAppStore() {
 
   const internalActions = {
     loadPcbFileContent(text: string) {
-      const pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+      let pcbShapeData: IPcbShapeData;
+      try {
+        pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+      } catch (error: any) {
+        console.error(error);
+        alert(`an error occurred while loading file`);
+        return;
+      }
       console.log({ pcbShapeData });
       state.pcbShapeData = pcbShapeData;
       state.footprintSearchWord =
