@@ -1,4 +1,5 @@
 import { IFootprintNode, IGraphicsNode, IPoint, IRect } from '~/base';
+import { vectorOp } from '~/funcs';
 
 export function calculatePcbShapeBoundingBox(
   footprints: IFootprintNode[],
@@ -7,7 +8,15 @@ export function calculatePcbShapeBoundingBox(
 ): IRect {
   const points: IPoint[] = [];
 
-  footprints.forEach((fp) => points.push(fp.at));
+  const fr = 9;
+  footprints.forEach((fp) =>
+    points.push(
+      vectorOp.add(fp.at, { x: -fr, y: 0 }),
+      vectorOp.add(fp.at, { x: fr, y: 0 }),
+      vectorOp.add(fp.at, { x: 0, y: -fr }),
+      vectorOp.add(fp.at, { x: 0, y: fr })
+    )
+  );
 
   nodes.forEach((node) => {
     if (node.type === 'path') {
