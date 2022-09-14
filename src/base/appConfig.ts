@@ -1,4 +1,4 @@
 export const appConfig = {
   shapeBoundingBoxOuterMargin: 1,
-  versionCode: 'v220914',
+  versionCode: 'v220914b',
 };
